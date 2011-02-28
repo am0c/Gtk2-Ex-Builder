@@ -77,7 +77,7 @@ sub builder (&) {
     };
     local *on = sub {
         my ($signal, $code) = @_;
-        $signal->_gobj->signal_connect( $signal => $code );
+        return $signal->_gobj->signal_connect( $signal => $code );
     };
     
     $code->();
