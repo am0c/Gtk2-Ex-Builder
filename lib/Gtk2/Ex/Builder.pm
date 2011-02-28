@@ -8,9 +8,9 @@ use Class::Accessor qw(antlers);
 
 extends qw(Exporter);
 
-has '_id', is => 'rw';
-has '_gobj', is => 'rw';
-has '_childs', is => 'rw';
+has '_id', is => 'rw', default => sub { undef };
+has '_gobj', is => 'rw', default => sub { undef };
+has '_childs', is => 'rw', default => sub { [] };
 
 BEGIN {
     our @EXPORT__in = qw(hav meta sets gets on);
@@ -91,5 +91,46 @@ sub builder (&) {
     $code->();
     $self;
 }
+
+sub get_gobj {
+    my ($self) = @_;
+    return $self->_gobj;
+}
+
+sub set_gobj {
+    my ($self, $obj) = @_;
+    return $self->_gobj($obj);
+}
+
+sub set_id {
+    my ($self, $id) = @_;
+    die "string is expected for id" if ref($id) ne '';
+    return $self->_id($id);
+}
+
+sub has_id {
+    my ($self) = @_;
+    return $self->get_id;
+}
+
+sub get_id {
+    my ($self) = @_;
+    return unless defined $self->_id;
+    return $self->_id;
+}
+
+sub get_widget {
+    my ($self, $find_id) = @_;
+
+    my $id = $self->get_id;
+    return $self->get_gobj if defined $id and $id eq $find_id;
+
+    for my $widget (@{ $self->_childs }) {
+        my $id = $widget->get_id;
+        return $widget->get_gobj if defined $id and $id eq $find_id;
+    }
+}
+
+
 
 1;
