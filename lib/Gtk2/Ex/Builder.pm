@@ -45,7 +45,9 @@ sub builder (&) {
     
     local *hav = sub {
         my ($obj) = @_;
-        if (ref($obj) eq 'Gtk2::Ex::Builder') {
+        die "Gtk2 widget or builder{} block is expected for argument of 'hav'"
+            unless defined $obj;
+        if ($obj->isa('Gtk2::Ex::Builder')) {
             $self->_gobj->add($obj->_gobj);
         }
         else {
@@ -68,15 +70,21 @@ sub builder (&) {
     local *sets = sub {
         my ($command, @para) = @_;
         my $method = "set_$command";
+        die "you should 'meta isa => '*' before 'sets' to create an gtk2 object"
+            unless defined $self->_gobj;
         return $self->_gobj->$method(@para);
     };
     local *gets = sub {
         my ($command) = @_;
         my $method = "get_$command";
+        die "you should 'meta isa => '*' before 'gets' to create an gtk2 object"
+            unless defined $self->_gobj;
         return $self->_gobj->$method();
     };
     local *on = sub {
         my ($signal, $code) = @_;
+        die "you should 'meta isa => '*' before 'on' to create an gtk2 object"
+            unless defined $self->_gobj;
         return $signal->_gobj->signal_connect( $signal => $code );
     };
     
