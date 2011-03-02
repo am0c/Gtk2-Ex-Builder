@@ -1,0 +1,7 @@
+2011-03-02  Hojung Youn  <amorette@cpan.org>
+
+	v0.001 released! :3
+
+	* lib/Gtk2/Ex/Builder.pm: is a main module.
+	* dist.ini: added prerequisites and notice that Class::Accessor supports
+	moose-like keywords only from version 0.34.

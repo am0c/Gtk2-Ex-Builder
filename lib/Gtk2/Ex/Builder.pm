@@ -167,7 +167,7 @@ Gtk2::Ex::Builder - Gtk2::Widget Wrapper and Gtk2 Building DSL
 
 =head1 PRE-ALPHA VERSION
 
-This library is totally B<UNDER DEVELOPING>
+This library is totally B<UNDER DEVELOPMENT>
 and B<APIs COULD BE CHANGED WITHOUT NOTICE> currently.
 
 Any recommendations or criticisms or ideas are welcome.
@@ -179,11 +179,16 @@ compose several Gtk2 widgets, and also a wrapper for a Gtk2 widget.
 
 =head1 SUPPORT
 
+The project is managed at L<http://github.com/am0c/Gtk2-Ex-Builder>.
+
+You can submit some issues here L<http://github.com/am0c/Gtk2-Ex-Builder/issues>.
+
+Any related mentions are welcome on C<irc.freenode.org> in C<#perl-kr>,
+and on L<http://twitter.com/am0c>.
+
 =head1 AUTHOR
 
 Hojung Youn <amorette@cpan.org>
-
-The author is on C<irc.freenode.org> in C<#perl-kr>, and on L<http://twitter.com/am0c>.
 
 =head1 COPYRIGHT AND LICENSE
 
