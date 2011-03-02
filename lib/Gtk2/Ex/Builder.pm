@@ -8,9 +8,9 @@ use Class::Accessor qw(antlers);
 
 extends qw(Exporter);
 
-has '_id', is => 'rw', default => sub { undef };
-has '_gobj', is => 'rw', default => sub { undef };
-has '_childs', is => 'rw', default => sub { [] };
+has '_id', is => 'rw';
+has '_gobj', is => 'rw';
+has '_childs', is => 'rw';
 
 BEGIN {
     our @EXPORT__in = qw(hav meta sets gets on);
@@ -39,6 +39,9 @@ BEGIN {
 sub builder (&) {
     my $code = shift;
     my $self = bless {
+        _id => undef,
+        _gobj => undef,
+        _childs => [],
     }, __PACKAGE__;
 
     no warnings 'redefine';
