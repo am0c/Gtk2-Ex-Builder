@@ -167,7 +167,7 @@ Gtk2::Ex::Builder - Gtk2::Widget Wrapper and Gtk2 Building DSL
 
 =head1 PRE-ALPHA VERSION
 
-This library is totally B<UNDER DEVELOPING>
+This library is totally B<UNDER DEVELOPMENT>
 and B<APIs COULD BE CHANGED WITHOUT NOTICE> currently.
 
 Any recommendations or criticisms or ideas are welcome.
