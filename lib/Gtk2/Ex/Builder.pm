@@ -48,11 +48,11 @@ sub builder (&) {
         my ($obj) = @_;
         die "Gtk2 widget or builder{} block is expected for argument of 'hav'"
             unless defined $obj;
-        if ($obj->isa('Gtk2::Ex::Builder')) {
-            $self->_gobj->add($obj->_gobj);
-        }
-        else {
-            $self->_gobj->add($obj);
+        die "builder{} has no widget, 'isa' statement is required"
+            unless defined $self->_gobj;
+        my $gobj = $obj->isa('Gtk2::Ex::Builder') ? $obj->_gobj : $obj;
+        if ($self->_gobj->isa('Gtk2::Box')) {
+            $self->_gobj->pack_start($gobj, 0, 0, 0); #TODO
         }
     };
     local *meta = sub {
