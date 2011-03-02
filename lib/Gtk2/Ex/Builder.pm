@@ -4,8 +4,6 @@ use warnings;
 use Sub::Call::Tail;
 use Class::Accessor qw(antlers);
 
-# ABSTRACT: Gtk2::Widget Wrapper and Gtk2 Building DSL
-
 extends qw(Exporter);
 
 has '_id', is => 'rw';
