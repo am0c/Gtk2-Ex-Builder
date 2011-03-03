@@ -144,26 +144,26 @@ Gtk2::Ex::Builder - Gtk2::Widget Wrapper and Gtk2 Building DSL
 
 =head1 SYNOPSIS
 
-  use Gtk2 -init;
-  use Gtk2::Ex::Builder;
+   use Gtk2 -init;
+   use Gtk2::Ex::Builder;
 
-  my $app = builder {
-    meta isa => 'Window';
-    sets title => 'My Application';
-    sets default_size => 400, 400;
-    on delete_event => sub { Gtk2->main_quit };
+   my $app = builder {
+     meta isa => 'Window';
+     sets title => 'My Application';
+     sets default_size => 400, 400;
+     on delete_event => sub { Gtk2->main_quit };
 
-    hav builder {
-      meta isa => 'Button';
-      meta is => 'my_button';
-      sets label => 'Hello World';
-      on clicked => sub { print "Hi\n" };
-    };
-  };
+     hav builder {
+       meta isa => 'Button';
+       meta is => 'my_button';
+       sets label => 'Hello World';
+       on clicked => sub { print "Hi\n" };
+     };
+   };
 
-  print $app->get_widget('my_button')->get_label, "\n";
+   print $app->get_widget('my_button')->get_label, "\n";
 
-  Gtk2->main;
+   Gtk2->main;
 
 =head1 PRE-ALPHA VERSION
 
