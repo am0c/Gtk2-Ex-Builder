@@ -152,7 +152,7 @@ sub get_widget {
 
 sub __check_for_method {
     my ($arg, $method) = @_;
-    unless (defined $arg and $arg eq __PACKAGE__) {
+    unless (defined $arg and ref($arg) eq __PACKAGE__) {
         die "'${method}' is only allowed for a method";
     }
 }
