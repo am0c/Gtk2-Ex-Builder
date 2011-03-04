@@ -37,6 +37,9 @@ BEGIN {
 
 sub builder (&) {
     my $code = shift;
+    if (!defined($code) or ref($code) ne 'CODE') {
+        die 'builder expects CODE block as a argument';
+    }
     return bless {
         _id => undef,
         _gobj => undef,
@@ -47,6 +50,7 @@ sub builder (&) {
 
 sub build {
     my $self = shift;
+    __check_for_method($self, 'build');
     
     no warnings 'redefine';
     
@@ -101,33 +105,39 @@ sub build {
 
 sub get_gobj {
     my ($self) = @_;
+    __check_for_method($self, 'get_gobj');
     return $self->_gobj;
 }
 
 sub set_gobj {
     my ($self, $obj) = @_;
+    __check_for_method($self, 'set_gobj');
     return $self->_gobj($obj);
 }
 
 sub set_id {
     my ($self, $id) = @_;
+    __check_for_method($self, 'set_id');
     die "string is expected for id" if ref($id) ne '';
     return $self->_id($id);
 }
 
 sub has_id {
     my ($self) = @_;
+    __check_for_method($self, 'has_id');
     return $self->get_id;
 }
 
 sub get_id {
     my ($self) = @_;
+    __check_for_method($self, 'get_id');
     return unless defined $self->_id;
     return $self->_id;
 }
 
 sub get_widget {
     my ($self, $find_id) = @_;
+    __check_for_method($self, 'get_widget');
 
     my $id = $self->get_id;
     return $self->get_gobj if defined $id and $id eq $find_id;
@@ -135,6 +145,14 @@ sub get_widget {
     for my $widget (@{ $self->_childs }) {
         my $id = $widget->get_id;
         return $widget->get_gobj if defined $id and $id eq $find_id;
+    }
+}
+
+
+sub __check_for_method {
+    my ($arg, $method) = @_;
+    unless (defined $arg and $arg eq __PACKAGE__) {
+        die "'${method}' is only allowed for a method";
     }
 }
 
