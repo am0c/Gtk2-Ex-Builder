@@ -11,6 +11,8 @@ has '_gobj', is => 'rw';
 has '_childs', is => 'rw';
 has '_code', is => 'ro';
 
+has 'is_built', is => 'rw';
+
 BEGIN {
     our @EXPORT__in = qw(hav meta sets gets on);
     our @EXPORT__out = qw(builder);
@@ -45,6 +47,7 @@ sub builder (&) {
         _gobj => undef,
         _childs => [],
         _code => $code,
+        is_built => 0,
     }, __PACKAGE__;
 }
 
@@ -61,7 +64,15 @@ sub build {
             unless defined $obj;
         die "builder{} has no widget, 'isa' statement is required"
             unless defined $self->_gobj;
-        my $gobj = $obj->isa('Gtk2::Ex::Builder') ? $obj->_gobj : $obj;
+        my $gobj = do {
+            if ($obj->isa(__PACKAGE__)) {
+                $obj->build unless $obj->is_built;
+                $obj->_gobj;
+            }
+            else {
+                $obj;
+            }
+        };
         if ($self->_gobj->isa('Gtk2::Box')) {
             $self->_gobj->pack_start($gobj, 0, 0, 0); #TODO
         }
@@ -101,6 +112,7 @@ sub build {
     };
     
     $code->();
+    $self->is_built(1);
     $self;
 }
 
