@@ -201,6 +201,7 @@ Gtk2::Ex::Builder - Gtk2::Widget Wrapper and Gtk2 Building DSL
      };
    };
 
+   $app->build;
    print $app->get_widget('my_button')->get_label, "\n";
 
    Gtk2->main;
