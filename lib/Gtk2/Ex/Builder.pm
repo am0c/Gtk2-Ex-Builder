@@ -74,7 +74,10 @@ sub build {
             }
         };
         if ($self->_gobj->isa('Gtk2::Box')) {
-            $self->_gobj->pack_start($gobj, 0, 0, 0); #TODO
+            $self->_gobj->pack_start($gobj, 1, 1, 0); #TODO
+        }
+        else {
+            $self->_gobj->add($gobj);
         }
     };
     local *meta = sub {
