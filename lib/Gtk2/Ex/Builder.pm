@@ -9,6 +9,9 @@ extends qw(Exporter);
 has '_id', is => 'rw';
 has '_gobj', is => 'rw';
 has '_childs', is => 'rw';
+has '_code', is => 'ro';
+
+has 'is_built', is => 'rw';
 
 BEGIN {
     our @EXPORT__in = qw(hav meta sets gets on);
@@ -36,12 +39,23 @@ BEGIN {
 
 sub builder (&) {
     my $code = shift;
-    my $self = bless {
+    if (!defined($code) or ref($code) ne 'CODE') {
+        die 'builder expects CODE block as a argument';
+    }
+    return bless {
         _id => undef,
         _gobj => undef,
         _childs => [],
+        _code => $code,
+        is_built => 0,
     }, __PACKAGE__;
+}
 
+sub build {
+    my $self = shift;
+    __check_for_method($self, 'build');
+    my $code = $self->_code;
+    
     no warnings 'redefine';
     
     local *hav = sub {
@@ -50,9 +64,20 @@ sub builder (&) {
             unless defined $obj;
         die "builder{} has no widget, 'isa' statement is required"
             unless defined $self->_gobj;
-        my $gobj = $obj->isa('Gtk2::Ex::Builder') ? $obj->_gobj : $obj;
+        my $gobj = do {
+            if ($obj->isa(__PACKAGE__)) {
+                $obj->build unless $obj->is_built;
+                $obj->_gobj;
+            }
+            else {
+                $obj;
+            }
+        };
         if ($self->_gobj->isa('Gtk2::Box')) {
-            $self->_gobj->pack_start($gobj, 0, 0, 0); #TODO
+            $self->_gobj->pack_start($gobj, 1, 1, 0); #TODO
+        }
+        else {
+            $self->_gobj->add($gobj);
         }
     };
     local *meta = sub {
@@ -90,38 +115,45 @@ sub builder (&) {
     };
     
     $code->();
+    $self->is_built(1);
     $self;
 }
 
 sub get_gobj {
     my ($self) = @_;
+    __check_for_method($self, 'get_gobj');
     return $self->_gobj;
 }
 
 sub set_gobj {
     my ($self, $obj) = @_;
+    __check_for_method($self, 'set_gobj');
     return $self->_gobj($obj);
 }
 
 sub set_id {
     my ($self, $id) = @_;
+    __check_for_method($self, 'set_id');
     die "string is expected for id" if ref($id) ne '';
     return $self->_id($id);
 }
 
 sub has_id {
     my ($self) = @_;
+    __check_for_method($self, 'has_id');
     return $self->get_id;
 }
 
 sub get_id {
     my ($self) = @_;
+    __check_for_method($self, 'get_id');
     return unless defined $self->_id;
     return $self->_id;
 }
 
 sub get_widget {
     my ($self, $find_id) = @_;
+    __check_for_method($self, 'get_widget');
 
     my $id = $self->get_id;
     return $self->get_gobj if defined $id and $id eq $find_id;
@@ -129,6 +161,14 @@ sub get_widget {
     for my $widget (@{ $self->_childs }) {
         my $id = $widget->get_id;
         return $widget->get_gobj if defined $id and $id eq $find_id;
+    }
+}
+
+
+sub __check_for_method {
+    my ($arg, $method) = @_;
+    unless (defined $arg and ref($arg) eq __PACKAGE__) {
+        die "'${method}' is only allowed for a method";
     }
 }
 
@@ -161,6 +201,7 @@ Gtk2::Ex::Builder - Gtk2::Widget Wrapper and Gtk2 Building DSL
      };
    };
 
+   $app->build;
    print $app->get_widget('my_button')->get_label, "\n";
 
    Gtk2->main;
