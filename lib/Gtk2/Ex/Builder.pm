@@ -9,7 +9,7 @@ extends qw(Exporter);
 has '_id', is => 'rw';
 has '_gobj', is => 'rw';
 has '_childs', is => 'rw';
-has '_code', is => 'rw';
+has '_code', is => 'ro';
 
 BEGIN {
     our @EXPORT__in = qw(hav meta sets gets on);
@@ -44,13 +44,14 @@ sub builder (&) {
         _id => undef,
         _gobj => undef,
         _childs => [],
-        _code => undef,
+        _code => $code,
     }, __PACKAGE__;
 }
 
 sub build {
     my $self = shift;
     __check_for_method($self, 'build');
+    my $code = $self->_code;
     
     no warnings 'redefine';
     
