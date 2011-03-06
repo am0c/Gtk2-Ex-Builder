@@ -1,3 +1,12 @@
+2011-03-06  Hojung Youn  <amorette@cpan.org>
+
+	v0.003001
+	it's still not a stable version.
+
+	* lib/Gtk2/Builder.pm: 'meta' keyword renamed to 'info' from now on.
+	'meta' package symbol conflicts with Moose's 'meta' symbol when used
+	together.
+
 2011-03-04  Hojung Youn  <amorette@cpan.org>
 
 	v0.003
